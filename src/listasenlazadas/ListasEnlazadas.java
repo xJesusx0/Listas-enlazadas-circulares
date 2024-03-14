@@ -334,10 +334,15 @@ public class ListasEnlazadas {
 
         int[] idsValidas = desempaquetar(ids);
 
-        int limiteSuperior = obtenerMayor(idsValidas);
-        int limiteInferior = obtenerMenor(idsValidas);
+        System.out.println(BLUE + "Ids validas:" + RESET);
+        imprimirVector(idsValidas);
 
-        int indice = inputElementoVector("Ingrese el id a eliminar", idsValidas);
+        int indice = inputElementoVector("Ingrese el id a eliminar, 0 - Para cancelar", idsValidas);
+
+        if(indice == 0){
+            mostrarAviso("Eliminacion cancelada");
+            return;
+        }
 
         Nodo auxiliar = cabeza;
         Nodo anterior = new Nodo();
@@ -345,6 +350,7 @@ public class ListasEnlazadas {
 
         int guia = 1;
         while(auxiliar != null){
+
             if(!(indice == guia)){
                 anterior = auxiliar;
                 auxiliar = auxiliar.apuntador;
@@ -441,6 +447,8 @@ public class ListasEnlazadas {
             if(auxiliar.saldo == saldo){
                 imprimirNodo(auxiliar,contador);
                 cantidadEncontrados++;
+
+                ids = actualizarIds(ids, contador);
             }
    
             auxiliar = auxiliar.apuntador;
@@ -476,8 +484,9 @@ public class ListasEnlazadas {
         do{
             if(auxiliar.saldo > saldo){
                 imprimirNodo(auxiliar,contador);
-                ids += "," + contador;
                 cantidadEncontrados++;
+
+                ids = actualizarIds(ids, contador);
             }
    
             auxiliar = auxiliar.apuntador;
@@ -514,8 +523,9 @@ public class ListasEnlazadas {
         do{
             if(auxiliar.saldo < saldo){
                 imprimirNodo(auxiliar,contador);
-                ids += "," + contador;
                 cantidadEncontrados++;
+
+                ids = actualizarIds(ids, contador);
             }
    
             auxiliar = auxiliar.apuntador;
@@ -546,8 +556,7 @@ public class ListasEnlazadas {
         int contador = 1;
         int cantidadEncontrados = 0;
 
-        while(auxiliar != null){
-
+        do{
             if(auxiliar.saldo == saldo){
                 imprimirNodo(auxiliar,contador);
                 cantidadEncontrados++;
@@ -556,7 +565,7 @@ public class ListasEnlazadas {
             auxiliar = auxiliar.apuntador;
             contador++;
 
-        }
+        } while (auxiliar != cabeza);
 
         if(cantidadEncontrados == 0){
             mostrarAviso("No se encontro ningun nodo");
@@ -577,14 +586,14 @@ public class ListasEnlazadas {
         Nodo auxiliar = cabeza;
         int mayor = auxiliar.saldo;
 
-        while(auxiliar.apuntador != null){
+        do{
             auxiliar = auxiliar.apuntador;
 
             if(auxiliar.saldo > mayor){
                 mayor = auxiliar.saldo;
-
             }
-        }
+
+        } while (auxiliar != cabeza);
 
         buscarSaldoRepetido(mayor);
 
@@ -600,14 +609,14 @@ public class ListasEnlazadas {
         Nodo auxiliar = cabeza;
         int menor = auxiliar.saldo;
 
-        while(auxiliar.apuntador!= null){
+        do{
             auxiliar = auxiliar.apuntador;
 
             if(auxiliar.saldo < menor){
                 menor = auxiliar.saldo;
-
             }
-        }
+
+        } while (auxiliar != cabeza);
 
         buscarSaldoRepetido(menor);
 
@@ -617,15 +626,22 @@ public class ListasEnlazadas {
 
     public static void promedioDeSueldos(){
 
+        if(!existeLista()){
+            mostrarError("La lista no existe");
+            return;
+        }
+
         Nodo auxiliar = cabeza;
         double sumatoria = 0;
         double cantidad = 0;
 
-        while (auxiliar != null) {
+        do{
+
             sumatoria += auxiliar.saldo;
             auxiliar = auxiliar.apuntador;
             cantidad++;
-        }
+
+        } while (auxiliar != cabeza);
 
         double resultado = sumatoria/cantidad;
         System.out.println(GREEN + "El promedio es: " + (resultado) + RESET);
@@ -634,13 +650,19 @@ public class ListasEnlazadas {
 
     public static void sumatoriaDeSueldos(){
 
+        if(!existeLista()){
+            mostrarError("La lista no existe");
+            return;
+        }
+
         Nodo auxiliar = cabeza;
         int sumatoria = 0;
 
-        while (auxiliar != null) {
+        do{
             sumatoria += auxiliar.saldo;
             auxiliar = auxiliar.apuntador;
-        }
+
+        } while (auxiliar != cabeza);
 
         System.out.println(GREEN + "La sumatoria es: " + (sumatoria) + RESET);
 
